@@ -94,3 +94,25 @@ app.delete('/libros/:id', async (req, res) => {
 app.listen(3000, () => {
   console.log(`Servidor corriendo en el puerto 3000`);
 });
+
+//Actualizar un libro por su id
+app.put('/libros/:id', async (req, res) => {
+  try {
+    const libro = await Libro.findByIdAndUpdate(
+      req.params.id,
+      {
+        titulo: req.body.titulo,
+        autor: req.body.autor,
+      },
+      { new: true } // Esta opción hará que se devuelva el documento actualizado
+    );
+
+    if (libro) {
+      res.json(libro);
+    } else {
+      res.status(404).send('Libro no encontrado');
+    }
+  } catch (error) {
+    res.status(500).send('Error al actualizar el libro');
+  }
+});
